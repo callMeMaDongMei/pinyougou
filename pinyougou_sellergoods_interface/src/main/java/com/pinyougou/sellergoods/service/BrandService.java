@@ -4,57 +4,67 @@ import com.pinyougou.pojo.TbBrand;
 import entity.PageResult;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 品牌接口
- * @author Administrator
  *
+ * @author Administrator
  */
 public interface BrandService {
 
-	public List<TbBrand> findAll();
-	
-	/**
-	 * 品牌分页
-	 * @param pageNum 当前页面
-	 * @param pageSize 每页记录数
-	 * @return
-	 */
-	public PageResult findPage(int pageNum, int pageSize);
+    public List<TbBrand> findAll();
 
-	/**
-	 * 增加
-	 * @param brand
-	 */
-	public void add(TbBrand brand);
+    /**
+     * 品牌分页
+     *
+     * @param pageNum  当前页面
+     * @param pageSize 每页记录数
+     * @return
+     */
+    public PageResult findPage(int pageNum, int pageSize);
 
-	/**
-	 * 根据ID查询实体
-	 * @param id
-	 * @return
-	 */
-	public TbBrand findOne(Long id);
+    /**
+     * 增加
+     *
+     * @param brand
+     */
+    public void add(TbBrand brand);
 
-	/**
-	 * 修改
-	 * @param brand
-	 */
-	public void update(TbBrand brand);
+    /**
+     * 根据ID查询实体
+     *
+     * @param id
+     * @return
+     */
+    public TbBrand findOne(Long id);
 
-
-	/**
-	 * 删除
-	 * @param ids
-	 */
-	public void delete(Long[] ids);
+    /**
+     * 修改
+     *
+     * @param brand
+     */
+    public void update(TbBrand brand);
 
 
-	/**
-	 * 品牌分页
-	 * @param pageNum 当前页面
-	 * @param pageSize 每页记录数
-	 * @return
-	 */
-	public PageResult findSth(TbBrand brand, int pageNum, int pageSize);
-	
+    /**
+     * 删除
+     *
+     * @param ids
+     */
+    public void delete(Long[] ids);
+
+
+    /**
+     * 品牌分页
+     *
+     * @param pageNum  当前页面
+     * @param pageSize 每页记录数
+     * @return
+     */
+    public PageResult findSth(TbBrand brand, int pageNum, int pageSize);
+
+    //public PageResult findPage(TbBrand brand, int pageNum, int pageSize);
+
+    public List<Map> selectOptionList();
 }
