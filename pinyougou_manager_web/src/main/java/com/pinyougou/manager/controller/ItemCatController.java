@@ -110,5 +110,12 @@ public class ItemCatController {
 	public PageResult search(@RequestBody TbItemCat itemCat, int page, int rows  ){
 		return itemCatService.findSth(itemCat, page, rows);
 	}
-	
+
+	@RequestMapping("/findByParentId")
+	public List<TbItemCat> findByParentId(Long parentId){
+		//System.out.println(itemCatService.findByParentId(parentId));
+		return itemCatService.findByParentId(parentId);
+	}
+
+
 }

@@ -61,4 +61,5 @@ public interface SellerService {
 
 	//更新seller注册状态
 	public void updateStatus(String sellerId,String status);
+
 }

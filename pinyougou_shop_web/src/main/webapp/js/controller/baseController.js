@@ -39,4 +39,21 @@ app.controller("baseController",function ($scope) {
         return value;
     }
 
-})
+    //在list集合中根据key值查询对象,规格名称与具体规格选项的存储
+    //specificationItems字段样式为
+    // [{"attributeName":"网络制式","attributeValue":["移动3G","移动4G"]},{
+    // "attributeName":"屏幕尺寸","attributeValue":["6寸","5.5寸"]}]
+
+
+    $scope.searchObjectByKey=function (list, key, keyValue) {
+        //遍历list集合
+        for(var i=0;i<list.length;i++){
+            if(list[i][key]==keyValue){
+                //就是说specificationItems.attributeName==网络制式
+                return list[i];
+            }
+        }
+        return null;
+    }
+
+});

@@ -1,5 +1,6 @@
 package com.pinyougou.sellergoods.service;
 import java.util.List;
+
 import com.pinyougou.pojo.TbItemCat;
 
 import entity.PageResult;
@@ -57,5 +58,11 @@ public interface ItemCatService {
 	 * @return
 	 */
 	public PageResult findSth(TbItemCat itemCat, int pageNum, int pageSize);
-	
+
+	/**
+	 * 根据上级id查询商品分类列表
+	 * @param parentId
+	 * @return
+	 */
+	public List<TbItemCat>findByParentId(Long parentId);
 }

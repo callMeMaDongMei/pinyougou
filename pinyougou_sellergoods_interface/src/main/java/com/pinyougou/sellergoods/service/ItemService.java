@@ -57,5 +57,5 @@ public interface ItemService {
 	 * @return
 	 */
 	public PageResult findSth(TbItem item, int pageNum, int pageSize);
-	
+
 }
