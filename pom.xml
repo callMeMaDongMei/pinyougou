@@ -16,6 +16,9 @@
         <module>pinyougou_dao</module>
         <module>pinyougou_pojo</module>
         <module>pinyougou_sellergoods_interface</module>
+        <module>pinyougou_content_interface</module>
+        <module>pinyougou_content_service</module>
+        <module>pinyougou_portal_web</module>
     </modules>
 
 

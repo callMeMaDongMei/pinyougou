@@ -20,7 +20,13 @@
     <script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
   
     <script src="../plugins/adminLTE/js/app.min.js"></script>
-    
+
+    <script type="text/javascript" src="../plugins/angularjs/angular.min.js"></script>
+    <script type="text/javascript" src="../js/base.js"></script>
+    <script type="text/javascript" src="../js/service/loginService.js"></script>
+    <script type="text/javascript" src="../js/controller/indexController.js"></script>
+
+
     <script type="text/javascript">   
 		 function SetIFrameHeight(){
 		  	  var iframeid=document.getElementById("iframe"); //iframe id
@@ -29,19 +35,11 @@
 			  }
 		 }
     
-	</script>
-
-    <!--引入angulajs-->
-    <script type="text/javascript" src="../plugins/angularjs/angular.min.js"></script>
-
-    <!--引入js提取出的文件var app,app.service,app.controller-->
-    <script type="text/javascript" src="../js/base.js"></script>
-    <script type="text/javascript" src="../js/service/loginService.js"></script>
-    <script type="text/javascript" src="../js/controller/indexController.js"></script>
-
+	</script>    
+ 
 </head>
 
-<body class="hold-transition skin-green sidebar-mini" ng-app="pinyougou" ng-controller="indexController" ng-init="showLoginName()">
+<body class="hold-transition skin-green sidebar-mini" ng-app="pinyougou" ng-controller="indexController" ng-init="showLoginName()" >
 
     <div class="wrapper">
 
@@ -272,7 +270,7 @@
                                     <img src="../img/user2-160x160.jpg" class="img-circle" alt="User Image">
 
                                     <p>
-                                       {{loginName}}
+                                       {{loginName}} 
                                         <small>最后登录 11:20AM</small>
                                     </p>
                                 </li>
@@ -390,7 +388,7 @@
 				        <ul class="treeview-menu">
 				
 				            <li id="admin-login">
-				                <a href="content_category.html" target="iframe">
+				                <a href="contentCategory.html" target="iframe">
 				                    <i class="fa fa-circle-o"></i>广告类型管理
 				                </a>
 				            </li>

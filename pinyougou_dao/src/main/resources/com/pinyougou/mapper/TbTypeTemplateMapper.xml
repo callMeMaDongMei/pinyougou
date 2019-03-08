@@ -89,6 +89,8 @@
     from tb_type_template
     where id = #{id,jdbcType=BIGINT}
   </select>
+
+  
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from tb_type_template
     where id = #{id,jdbcType=BIGINT}
@@ -208,5 +210,4 @@
       custom_attribute_items = #{customAttributeItems,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
-
 </mapper>

@@ -97,12 +97,9 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.pinyougou.pojo.TbSpecification" >
-
-    <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
-      /*完成添加操作后把新产生的id值set进bean对象中*/
-      SELECT LAST_INSERT_ID() AS id
-    </selectKey>
-
+  	<selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+		SELECT LAST_INSERT_ID() AS id
+	</selectKey>
     insert into tb_specification (id, spec_name)
     values (#{id,jdbcType=BIGINT}, #{specName,jdbcType=VARCHAR})
   </insert>
@@ -167,9 +164,7 @@
     set spec_name = #{specName,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
-
-  <!--模板管理新建中的关联品牌显示查询操作-->
-  <select id="selectOptionList" resultType="java.util.Map" >
-    select id,spec_name as text from tb_specification
+  <select id="selectOptionList" resultType="java.util.Map">
+  	select id,spec_name as text from tb_specification
   </select>
 </mapper>

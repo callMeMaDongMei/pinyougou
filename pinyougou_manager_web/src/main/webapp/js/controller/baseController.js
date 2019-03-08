@@ -21,6 +21,7 @@ app.controller("baseController",function ($scope) {
     $scope.updateSelection=function($event,id){
         if($event.target.checked){
             $scope.selectIds.push(id);//push向集合添加元素
+            //alert($scope.selectIds);
         }else{
             var index= $scope.selectIds.indexOf(id);//查找值的 位置
             $scope.selectIds.splice(index,1);//参数1：移除的位置 参数2：移除的个数
