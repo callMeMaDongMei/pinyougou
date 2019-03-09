@@ -19,6 +19,10 @@
         <module>pinyougou_content_interface</module>
         <module>pinyougou_content_service</module>
         <module>pinyougou_portal_web</module>
+        <module>pinyougou_solr_util</module>
+        <module>pinyougou_serach_interface</module>
+        <module>pinyougou_serach_service</module>
+        <module>pinyougou_serach_web</module>
     </modules>
 
 

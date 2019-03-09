@@ -1,0 +1,13 @@
+0:0:0:0:0:0:0:1 - - [09/Mar/2019:09:11:21 +0800] "GET / HTTP/1.1" 304 - http-bio-9103-exec-1 403
+0:0:0:0:0:0:0:1 - - [09/Mar/2019:09:11:21 +0800] "GET /%7B%7Bitem.pic%7D%7D HTTP/1.1" 404 991 http-bio-9103-exec-3 7
+0:0:0:0:0:0:0:1 - - [09/Mar/2019:09:11:21 +0800] "GET /js/service/contentService.js HTTP/1.1" 304 - http-bio-9103-exec-5 3
+0:0:0:0:0:0:0:1 - - [09/Mar/2019:09:11:21 +0800] "GET /js/base.js HTTP/1.1" 304 - http-bio-9103-exec-2 6
+0:0:0:0:0:0:0:1 - - [09/Mar/2019:09:11:21 +0800] "GET /js/controller/contentController.js HTTP/1.1" 304 - http-bio-9103-exec-6 3
+0:0:0:0:0:0:0:1 - - [09/Mar/2019:09:11:22 +0800] "GET /assets/img/favicon.ico HTTP/1.1" 404 995 http-bio-9103-exec-9 2
+0:0:0:0:0:0:0:1 - - [09/Mar/2019:09:11:25 +0800] "GET /content/findByCategoryId.do?categoryId=1 HTTP/1.1" 200 540 http-bio-9103-exec-4 2881
+0:0:0:0:0:0:0:1 - - [09/Mar/2019:09:12:58 +0800] "GET / HTTP/1.1" 304 - http-bio-9103-exec-3 2
+0:0:0:0:0:0:0:1 - - [09/Mar/2019:09:12:59 +0800] "GET /%7B%7Bitem.pic%7D%7D HTTP/1.1" 404 991 http-bio-9103-exec-3 2
+0:0:0:0:0:0:0:1 - - [09/Mar/2019:09:12:59 +0800] "GET /content/findByCategoryId.do?categoryId=1 HTTP/1.1" 200 715 http-bio-9103-exec-3 68
+0:0:0:0:0:0:0:1 - - [09/Mar/2019:09:13:30 +0800] "GET / HTTP/1.1" 304 - http-bio-9103-exec-3 3
+0:0:0:0:0:0:0:1 - - [09/Mar/2019:09:13:30 +0800] "GET /%7B%7Bitem.pic%7D%7D HTTP/1.1" 404 991 http-bio-9103-exec-3 1
+0:0:0:0:0:0:0:1 - - [09/Mar/2019:09:13:30 +0800] "GET /content/findByCategoryId.do?categoryId=1 HTTP/1.1" 200 540 http-bio-9103-exec-3 20
