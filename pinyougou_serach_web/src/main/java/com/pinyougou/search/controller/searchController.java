@@ -11,7 +11,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/itemserach")
 public class searchController {
-    @Reference(timeout = 10000)
+    @Reference(timeout = 20000)
     private ItemSearchService itemSearchService;
     @RequestMapping("/search")
     public Map search(@RequestBody Map searchMap) {
