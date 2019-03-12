@@ -11,7 +11,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/content")
 public class ContentController {
-    @Reference
+    @Reference(timeout = 20000)
     private ContentService contentService;
 
     @RequestMapping("/findByCategoryId")

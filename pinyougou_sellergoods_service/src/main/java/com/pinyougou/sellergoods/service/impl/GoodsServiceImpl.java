@@ -1,5 +1,6 @@
 package com.pinyougou.sellergoods.service.impl;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -56,7 +57,7 @@ public class GoodsServiceImpl implements GoodsService {
     public PageResult findPage(int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
 
-        TbGoodsExample example=new TbGoodsExample();
+        TbGoodsExample example = new TbGoodsExample();
         Criteria criteria = example.createCriteria();
         criteria.andIsDeleteIsNull();//非删除状态
         Page<TbGoods> page = (Page<TbGoods>) goodsMapper.selectByExample(example);
@@ -242,5 +243,25 @@ public class GoodsServiceImpl implements GoodsService {
             goods.setAuditStatus(status);
             goodsMapper.updateByPrimaryKey(goods);
         }
+    }
+
+    /**
+     * 根据SPU的ID集合查询SKU列表
+     *
+     * @param goosIds
+     * @param status
+     * @return
+     */
+    public List<TbItem> findItemListByGoodsIdListAndStatus(Long[] goosIds, String status) {
+        TbItemExample example = new TbItemExample();
+        TbItemExample.Criteria criteria = example.createCriteria();
+        criteria.andStatusEqualTo(status);//审核状态才更新索引库
+        /*for (Long id : goosIds) {
+            System.out.println("id:"+id);
+        }*/
+        criteria.andGoodsIdIn(Arrays.asList(goosIds)); //指定的商品id列表条件
+
+
+        return itemMapper.selectByExample(example);
     }
 }

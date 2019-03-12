@@ -1,7 +1,10 @@
 package com.pinyougou.manager.controller;
+import java.util.Arrays;
 import java.util.List;
 
+import com.pinyougou.pojo.TbItem;
 import com.pinyougou.pojogroup.Goods;
+import com.pinyougou.search.service.ItemSearchService;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,7 +23,7 @@ import entity.Result;
 @RequestMapping("/goods")
 public class GoodsController {
 
-	@Reference
+	@Reference(timeout = 30000)
 	private GoodsService goodsService;
 	
 	/**
@@ -94,6 +97,8 @@ public class GoodsController {
 	public Result delete(Long [] ids){
 		try {
 			goodsService.delete(ids);
+			//从索引库中删除
+			itemSearchService.deleteByGoodsIds(Arrays.asList(ids));
 			return new Result(true, "删除成功"); 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -113,11 +118,31 @@ public class GoodsController {
 		return goodsService.findPage(goods, page, rows);
 	}
 
+	/**
+	 * 商品审核
+	 * @param ids
+	 * @param status
+	 * @return
+	 */
+	@Reference(timeout = 200000)//20s超时设置
+	private ItemSearchService itemSearchService;
 	@RequestMapping("/updateStatus")
 	public Result updateStatus(Long[] ids, String status){
 		try {
             //System.out.println(status);
 			goodsService.updateStatus(ids, status);
+			if("1".equals(status)){
+				//审核通过才去维护索引库
+				List<TbItem> itemList = goodsService.findItemListByGoodsIdListAndStatus(ids, status);
+				//再调用search中的importList(list)方法,完成对索引库的维护
+                System.out.println(ids+status+"itemList"+itemList);
+				if(itemList.size()>0){
+                    itemSearchService.importList(itemList);
+                }else {
+                    System.out.println("索引维护失败");
+                }
+
+			}
 			return new Result(true, "成功");
 		} catch (Exception e) {
 			e.printStackTrace();

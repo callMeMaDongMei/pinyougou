@@ -5,6 +5,7 @@ import com.pinyougou.pojo.TbItem;
 import com.pinyougou.search.service.ItemSearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.solr.core.SolrTemplate;
 import org.springframework.data.solr.core.query.*;
@@ -30,6 +31,10 @@ public class ItemSearchServiceImpl implements ItemSearchService {
     @Override
     public Map<String, Object> search(Map searchMap) {
         Map map = new HashMap();
+        //关键词空格处理
+        // TODO: 2019/3/11
+        String keywords = (String) searchMap.get("keywords");
+        searchMap.put("keywords",keywords.replace(" ",""));//空串替换空格
 
         //1_查询列表(含高亮字符)
         map.putAll(searchList(searchMap));
@@ -42,7 +47,7 @@ public class ItemSearchServiceImpl implements ItemSearchService {
         String category = (String) searchMap.get("category");
         if (!category.equals("")) {
             map.putAll(searchBrandAndSpecList(category));
-        }else {
+        } else {
             if (categoryList.size() > 0) {
                 map.putAll(searchBrandAndSpecList(categoryList.get(0)));
             }
@@ -88,17 +93,67 @@ public class ItemSearchServiceImpl implements ItemSearchService {
         }
 
         //  1.4根据规格信息筛选查询
-        if (searchMap.get("spec") != null){//规格信息不为空时,进行筛选查询
-            System.out.println(searchMap.get("spec"));
+        if (searchMap.get("spec") != null) {//规格信息不为空时,进行筛选查询
+            //System.out.println(searchMap.get("spec"));
             Map<String, String> specMap = (Map<String, String>) searchMap.get("spec");
             for (String key : specMap.keySet()) {
                 //循环添加过滤查询条件
                 FilterQuery filterQuery = new SimpleFilterQuery();
-                Criteria filterCriteria = new Criteria("item_spec_"+key).is(specMap.get(key));
+                Criteria filterCriteria = new Criteria("item_spec_" + key).is(specMap.get(key));
                 filterQuery.addCriteria(filterCriteria);
                 query.addFilterQuery(filterQuery);
             }
         }
+
+        // 1.5根据价格筛选
+        if (!"".equals(searchMap.get("price"))) {//价格信息不为空时,进行筛选查询
+            /*
+              String price = (String) searchMap.get("price");
+              String[] split = price.split("_");
+              */
+
+            String[] price = ((String) searchMap.get("price")).split("-");
+            if (!price[0].equals("0")) {//最低价格不为0,查询条件为大于等于
+                Criteria filterCriteria = new Criteria("item_price").greaterThanEqual(price[0]);
+                FilterQuery filterQuery = new SimpleFilterQuery();
+                filterQuery.addCriteria(filterCriteria);
+                query.addFilterQuery(filterQuery);
+            }
+            if (!price[1].equals("*")) {//3000-*的情况
+                FilterQuery filterQuery = new SimpleFilterQuery();
+                Criteria filterCriteria = new Criteria("item_price").lessThanEqual(price[1]);
+                filterQuery.addCriteria(filterCriteria);
+                query.addFilterQuery(filterQuery);
+            }
+        }
+
+        // 1.6分页查询
+        Integer pageNo = (Integer) searchMap.get("pageNo");// 拿到pageNo
+        if (pageNo == null) {
+            pageNo = 1;   //没有当前页默认第一页
+        }
+        Integer pageSize = (Integer) searchMap.get("pageSize");// 拿到每页记录数pageSize
+        if (pageSize == null) {
+            pageSize = 20;//每页显示条数
+        }
+        query.setOffset((pageNo - 1) * pageSize);// 从第几条记录查询
+        query.setRows(pageSize);//设置每页条数
+
+        // 1.7价格排序
+        String sortValue = (String) searchMap.get("sort");//升降序状态
+        String sortField = (String) searchMap.get("sortField");//获取排序字段
+        if(!"".equals(sortValue) && searchMap!=null){
+            if(sortValue.equals("ASC")){
+                Sort sort=new Sort(Sort.Direction.ASC,"item_"+sortField);//升序价格从低到高
+                query.addSort(sort);
+            }
+            if(sortValue.equals("DESC")){
+                Sort sort=new Sort(Sort.Direction.DESC,"item_"+sortField);//升序价格从低到高
+                query.addSort(sort);
+            }
+
+        }
+
 
         //**********************   获取高亮结果集(之前写过滤查询)   ****************************
         //得到高亮页对象
@@ -120,7 +175,9 @@ public class ItemSearchServiceImpl implements ItemSearchService {
                 item.setTitle(highlightList.get(0).getSnipplets().get(0));//设置高亮的文本内容
             }
         }
-        map.put("rows", page.getContent());
+        map.put("rows", page.getContent());//返回分页内容
+        map.put("totalPages",page.getTotalPages());//返回总页数
+        map.put("total",page.getTotalElements());//返回总记录数
         return map;
     }
 
@@ -183,6 +240,23 @@ public class ItemSearchServiceImpl implements ItemSearchService {
             map.put("specList", specList);
         }
         return map;
+    }
 
+    //导入列表,准备维护索引库
+    @Override
+    public void importList(List list) {
+        solrTemplate.saveBeans(list);
+        solrTemplate.commit();
+    }
+
+    //删除商品数据,维护索引库
+
+    @Override
+    public void deleteByGoodsIds(List goodsIdList) {
+        Query query=new SimpleQuery("*:*");
+        Criteria criteria=new Criteria("item_goodsid").in(goodsIdList);
+        query.addCriteria(criteria);
+        solrTemplate.delete(query);
+        solrTemplate.commit();
     }
 }
