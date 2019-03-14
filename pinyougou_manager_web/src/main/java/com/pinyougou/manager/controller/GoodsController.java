@@ -1,7 +1,9 @@
 package com.pinyougou.manager.controller;
+
 import java.util.Arrays;
 import java.util.List;
 
+import com.pinyougou.page.service.ItemPageService;
 import com.pinyougou.pojo.TbItem;
 import com.pinyougou.pojogroup.Goods;
 import com.pinyougou.search.service.ItemSearchService;
@@ -14,139 +16,163 @@ import com.pinyougou.sellergoods.service.GoodsService;
 
 import entity.PageResult;
 import entity.Result;
+
 /**
  * controller
- * @author Administrator
  *
+ * @author Administrator
  */
 @RestController
 @RequestMapping("/goods")
 public class GoodsController {
 
-	@Reference(timeout = 30000)
-	private GoodsService goodsService;
-	
-	/**
-	 * 返回全部列表
-	 * @return
-	 */
-	@RequestMapping("/findAll")
-	public List<TbGoods> findAll(){			
-		return goodsService.findAll();
-	}
-	
-	
-	/**
-	 * 返回全部列表
-	 * @return
-	 */
-	@RequestMapping("/findPage")
-	public PageResult  findPage(int page,int rows){			
-		return goodsService.findPage(page, rows);
-	}
-	
-	/**
-	 * 增加
-	 * @param goods
-	 * @return
-	 */
-	@RequestMapping("/add")
-	public Result add(@RequestBody Goods goods){
-		try {
-			goodsService.add(goods);
-			return new Result(true, "增加成功");
-		} catch (Exception e) {
-			e.printStackTrace();
-			return new Result(false, "增加失败");
-		}
-	}
-	
-	/**
-	 * 修改
-	 * @param goods
-	 * @return
-	 */
-	@RequestMapping("/update")
-	public Result update(@RequestBody Goods goods){
-		try {
-			goodsService.update(goods);
-			return new Result(true, "修改成功");
-		} catch (Exception e) {
-			e.printStackTrace();
-			return new Result(false, "修改失败");
-		}
-	}	
-	
-	/**
-	 * 获取实体
-	 * @param id
-	 * @return
-	 */
-	@RequestMapping("/findOne")
-	public Goods findOne(Long id){
+    @Reference(timeout = 30000)
+    private GoodsService goodsService;
 
-		return goodsService.findOne(id);
-	}
-	
-	/**
-	 * 批量删除
-	 * @param ids
-	 * @return
-	 */
-	@RequestMapping("/delete")
-	public Result delete(Long [] ids){
-		try {
-			goodsService.delete(ids);
-			//从索引库中删除
-			itemSearchService.deleteByGoodsIds(Arrays.asList(ids));
-			return new Result(true, "删除成功"); 
-		} catch (Exception e) {
-			e.printStackTrace();
-			return new Result(false, "删除失败");
-		}
-	}
-	
-		/**
-	 * 查询+分页
-	 * @param
-	 * @param page
-	 * @param rows
-	 * @return
-	 */
-	@RequestMapping("/search")
-	public PageResult search(@RequestBody TbGoods goods, int page, int rows  ){
-		return goodsService.findPage(goods, page, rows);
-	}
+    /**
+     * 返回全部列表
+     *
+     * @return
+     */
+    @RequestMapping("/findAll")
+    public List<TbGoods> findAll() {
+        return goodsService.findAll();
+    }
 
-	/**
-	 * 商品审核
-	 * @param ids
-	 * @param status
-	 * @return
-	 */
-	@Reference(timeout = 200000)//20s超时设置
-	private ItemSearchService itemSearchService;
-	@RequestMapping("/updateStatus")
-	public Result updateStatus(Long[] ids, String status){
-		try {
+
+    /**
+     * 返回全部列表
+     *
+     * @return
+     */
+    @RequestMapping("/findPage")
+    public PageResult findPage(int page, int rows) {
+        return goodsService.findPage(page, rows);
+    }
+
+    /**
+     * 增加
+     *
+     * @param goods
+     * @return
+     */
+    @RequestMapping("/add")
+    public Result add(@RequestBody Goods goods) {
+        try {
+            goodsService.add(goods);
+            return new Result(true, "增加成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false, "增加失败");
+        }
+    }
+
+    /**
+     * 修改
+     *
+     * @param goods
+     * @return
+     */
+    @RequestMapping("/update")
+    public Result update(@RequestBody Goods goods) {
+        try {
+            goodsService.update(goods);
+            return new Result(true, "修改成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false, "修改失败");
+        }
+    }
+
+    /**
+     * 获取实体
+     *
+     * @param id
+     * @return
+     */
+    @RequestMapping("/findOne")
+    public Goods findOne(Long id) {
+
+        return goodsService.findOne(id);
+    }
+
+    /**
+     * 批量删除
+     *
+     * @param ids
+     * @return
+     */
+    @RequestMapping("/delete")
+    public Result delete(Long[] ids) {
+        try {
+            goodsService.delete(ids);
+            //从索引库中删除
+            itemSearchService.deleteByGoodsIds(Arrays.asList(ids));
+            return new Result(true, "删除成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false, "删除失败");
+        }
+    }
+
+    /**
+     * 查询+分页
+     *
+     * @param
+     * @param page
+     * @param rows
+     * @return
+     */
+    @RequestMapping("/search")
+    public PageResult search(@RequestBody TbGoods goods, int page, int rows) {
+        return goodsService.findPage(goods, page, rows);
+    }
+
+    /**
+     * 商品审核
+     *
+     * @param ids
+     * @param status
+     * @return
+     */
+    @Reference(timeout = 200000)//20s超时设置
+    private ItemSearchService itemSearchService;
+
+    @RequestMapping("/updateStatus")
+    public Result updateStatus(Long[] ids, String status) {
+        try {
             //System.out.println(status);
-			goodsService.updateStatus(ids, status);
-			if("1".equals(status)){
-				//审核通过才去维护索引库
-				List<TbItem> itemList = goodsService.findItemListByGoodsIdListAndStatus(ids, status);
-				//再调用search中的importList(list)方法,完成对索引库的维护
-                System.out.println(ids+status+"itemList"+itemList);
-				if(itemList.size()>0){
+            goodsService.updateStatus(ids, status);
+            if ("1".equals(status)) {
+                //*************导入到索引库 审核通过才去维护索引库
+                List<TbItem> itemList = goodsService.findItemListByGoodsIdListAndStatus(ids, status);
+                //再调用search中的importList(list)方法,完成对索引库的维护
+                System.out.println(ids + status + "itemList" + itemList);
+                if (itemList.size() > 0) {
                     itemSearchService.importList(itemList);
-                }else {
+                } else {
                     System.out.println("索引维护失败");
                 }
+              //*************生成商品详情页
+                for (Long goodsId : ids) {
+                    itemPageService.genItemHtml(goodsId);
+                }
 
-			}
-			return new Result(true, "成功");
-		} catch (Exception e) {
-			e.printStackTrace();
-			return new Result(false, "失败");
-		}
-	}
+            }
+            return new Result(true, "成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false, "失败");
+        }
+    }
+
+    @Reference(timeout = 20000)
+    private ItemPageService itemPageService;
+
+    @RequestMapping("/genHtml")
+    public void genHtml(Long goodsId) {
+
+        itemPageService.genItemHtml(goodsId);
+
+    }
 }
