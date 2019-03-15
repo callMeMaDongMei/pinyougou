@@ -39,7 +39,8 @@
   <!--配置spring-security安全认证框架,进行登录校验-->
   <context-param>
     <param-name>contextConfigLocation</param-name>
-    <param-value>classpath:spring/spring-security.xml</param-value>
+    <!--<param-value>classpath:spring/spring-security.xml</param-value>-->
+    <param-value>classpath:spring/spring-*.xml</param-value>
   </context-param>
   <listener>
     <listener-class>
