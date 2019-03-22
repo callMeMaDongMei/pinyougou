@@ -29,6 +29,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if (seller != null) {
             if (seller.getStatus().equals("1")) {
                 String password = seller.getPassword();
+                System.out.println("经过认证类..."+username);
                 return new User(username, password, grantAuths);
             } else {
                 return null;

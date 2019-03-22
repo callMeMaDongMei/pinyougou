@@ -32,7 +32,7 @@ public class ItemSearchServiceImpl implements ItemSearchService {
     public Map<String, Object> search(Map searchMap) {
         Map map = new HashMap();
         //关键词空格处理
-        // TODO: 2019/3/11
+
         String keywords = (String) searchMap.get("keywords");
         searchMap.put("keywords",keywords.replace(" ",""));//空串替换空格
 
